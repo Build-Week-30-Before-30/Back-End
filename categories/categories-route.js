@@ -1,6 +1,6 @@
 const router = require('express').Router()
 
-const Categories = require('./categories-model')
+const Categories = require('../categories/categories-model')
 const restricted = require('../users/authenticate-middleware')
 
 

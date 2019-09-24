@@ -1,6 +1,6 @@
 const router = require('express').Router()
 
-const Items = require('./items-model')
+const Items = require('../items/items-model')
 const restricted = require('../users/authenticate-middleware')
 
 
