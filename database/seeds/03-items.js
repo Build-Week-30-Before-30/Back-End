@@ -5,52 +5,52 @@ exports.seed = function(knex) {
       // Inserts seed entries
       return knex('items').insert([
         {
-          item_name: '',
-          description: '',
+          item_name: 'Skydiving',
+          description: 'write something cool here',
           user_id: 2,
-          category_id: 1,
-          privacy: true,
-          target_date: ''
+          category_id: 'adventure',
+          links: ['link1', 'link2'],
+          completed: false,
         },
         {
-          item_name: '', 
-          description: '',
+          item_name: 'Learn Japanese', 
+          description: 'write something cool here',
           user_id: 3,
-          category_id: 4,
-          privacy: false,
-          target_date: ''
+          category_id: 'education',
+          links: ['link1', 'link2'],
+          completed: false,
         },
         {
-          item_name: '', 
-          description: '',
+          item_name: 'Visit the Grand Canyon', 
+          description: 'write something cool here',
           user_id: 1,
-          category_id: 2,
-          privacy: false,
-          target_date: ''
+          category_id: 'adventure',
+          links: ['link1', 'link2'],
+          completed: false,
         },
         {
-          item_name: '', 
-          description: '',
+          item_name: 'Go sea fishing', 
+          description: 'write something cool here',
           user_id: 1,
-          category_id: 3,
-          privacy: false,
-          target_date: ''
+          category_id: 'adventure',
+          links: ['link1', 'link2'],
+          completed: false,
         },
         {
-          item_name: '', 
-          description: '',
+          item_name: 'Visit the Dead Sea', 
+          description: 'write something here',
           user_id: 2,
-          category_id: 4,
-          privacy: false,
-          target_date: ''
+          category_id: 'travel',
+          links: ['link1', 'link2'],
+          completed: false,
         },
         {
-          item_name: '', 
-          description: '',
+          item_name: 'learn how to code', 
+          description: 'write something cool here',
           user_id: 3,
-          category_id: 1,
-          privacy: true,
-          target_date: ''
+          category_id: 'education',
+          links: ['link1', 'link2'],
+          completed: false,
         }
       ]);
     });
