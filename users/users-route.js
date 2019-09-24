@@ -28,55 +28,46 @@ function validateUser(req, res, next) {
 
 // REGISTER NEW USER
 
-router.post('/register', validateUser, (req, res) => {
-    const newUser = req.body;
-    const hash = bcrypt.hashSync(newUser.password, 4)
-    newUser.password = hash
-
-    Users.getUsers()
-        .then(users => {
-            const arr = users.map(user => user.username)
-            const found = arr.find(function(element) {
-                return element == newUser.username
-            })
-
-            if (found) {
-                res.status(400).json({ message: 'username is unavailable' })
-            } else {
-                Users.addUser(newUser)
-                    .then(user => {
-                        res.status(201).json({ message: 'user successfully registered'})
-                    })
-            }
+router.post('/register', (req, res) => {
+    const user = req.body
+    const hash = bcrypt.hashSync(user.password, 14)
+    user.password = hash
+    return users.addUser(user)
+        .then(created => {
+            res.status(201).json(created)
+        }).catch(error => {
+            res.status(500).json({ message: 'failed to add user' })
         })
-        .catch(error => res.status(500).json(error))
+})
+   
+router.post('/login', (req, res) => {
+    let { password, username } = req.body
+    students.findBy({ username })
+        .first()//takes first item out of object
+        //passing it the password guess in plain text and the password hash obtained from the database to validate credentials.
+        //If the password guess is valid, the method returns true, otherwise it returns false.The library will hash the password guess first and then compare the hashes
+        .then(user => {
+            if (user && bcrypt.compareSync(password, user.password)) {
+                const token = generateToken(user)
+                res.status(200).json({ message: `Hello ${user.username}, You've successfully logged in`, token })
+            } else {
+                res.status(401).json({ message: 'invalid login info, try again.' })
+            }
+        }).catch(error => {
+            res.status(500).json({ message: 'Hey backend, you messed up, login failed' })
+        })
 })
 
-
-// LOGIN
-
-router.post('/login', validateUser, (req, res) => {
-    const { username, password } = req.body
-
-    Users.userLogin(username)
-    .first()
-    .then(user => {
-        if (user && bcrypt.compareSync(password, user.password)) {
-            const token = getToken(user);
-
-            res.status(200).json({
-                message: `Welcome ${user.username}`,
-                token,
-            })
-        } else {
-            res.status(401).json({ message: 'Invalid Credentials' })
-        }
-    })
-    .catch(error => {
-        res.status(500).json(error)
-    })
-})
-
+function generateToken(user) {
+    const payload = {
+        subject: user.id,
+        username: user.username,
+    }
+    const option = {
+        expiresIn: '8h'
+    }
+    return jwt.sign(payload, secret.jwtSecret, option)
+}
 
 // GET ALL USERS
 
