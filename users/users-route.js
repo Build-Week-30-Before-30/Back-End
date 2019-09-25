@@ -32,7 +32,7 @@ router.post('/register', (req, res) => {
     const user = req.body
     const hash = bcrypt.hashSync(user.password, 14)
     user.password = hash
-    return users.addUser(user)
+    Users.addUser(user)
         .then(created => {
             res.status(201).json(created)
         }).catch(error => {
@@ -41,13 +41,12 @@ router.post('/register', (req, res) => {
 })
    
 router.post('/login', (req, res) => {
-    let { password, username } = req.body
-    students.findBy({ username })
-        .first()//takes first item out of object
+    let { username, password } = req.body
+    users.findBy({ username }).first()//takes first item out of object
         //passing it the password guess in plain text and the password hash obtained from the database to validate credentials.
         //If the password guess is valid, the method returns true, otherwise it returns false.The library will hash the password guess first and then compare the hashes
         .then(user => {
-            if (user && bcrypt.compareSync(password, user.password)) {
+            if (users && bcrypt.compareSync(password, user.password)) {
                 const token = generateToken(user)
                 res.status(200).json({ message: `Hello ${user.username}, You've successfully logged in`, token })
             } else {
@@ -60,7 +59,6 @@ router.post('/login', (req, res) => {
 
 function generateToken(user) {
     const payload = {
-        subject: user.id,
         username: user.username,
     }
     const option = {

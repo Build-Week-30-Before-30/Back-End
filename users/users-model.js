@@ -7,9 +7,9 @@ module.exports = {
     editUser
 }
 
-function addUser(newUser) {
+function addUser(user) {
     return db('users')
-        .insert(newUser)
+        .insert(user)
 }
 
 function userLogin(username) {
