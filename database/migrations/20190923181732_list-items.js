@@ -28,13 +28,11 @@ exports.up = function(knex) {
             .onDelete('RESTRICT')
             .onUpdate('CASCADE')
         tbl
-            .boolean('privacy')
+            .boolean('links')
             .defaultTo(true)
+        
         tbl
-            .boolean('complete')
-            .defaultTo(false)
-        tbl
-            .text('target_date')
+            .text('completed')
     })
 };
 

@@ -39,23 +39,51 @@ router.post('/register', (req, res) => {
             res.status(500).json({ message: 'failed to add user' })
         })
 })
-   
+
 router.post('/login', (req, res) => {
-    let { username, password } = req.body
-    Users.findBy({ username })//takes first item out of object
-        //passing it the password guess in plain text and the password hash obtained from the database to validate credentials.
-        //If the password guess is valid, the method returns true, otherwise it returns false.The library will hash the password guess first and then compare the hashes
-        .then(user => {
-            if (user && bcrypt.compareSync(password, user.password)) {
-                const token = generateToken(user)
-                res.status(200).json({ message: `Hello ${user.username}, You've successfully logged in`, token })
-            } else {
-                res.status(401).json({ message: 'invalid login info, try again.' })
-            }
-        }).catch(error => {
-            res.status(500).json({ message: 'Hey backend, you messed up, login failed', error })
-        })
-})
+    let { username, password } = req.body;
+  
+    Users.findBy({ username })
+      .first()
+      .then(user => {
+        if (users && bcrypt.compareSync(password, user.password)) {
+          // create username token 
+          const token = generateToken(user);
+  
+          // send back the token 
+          res.status(200).json({ token });
+        } else {
+  
+          // incorrect password 
+          res.status(401).json({ message: 'Invalid Credentials' });
+        }
+      })
+      .catch(error => {
+        // no user with that username 
+        res.status(500).json({
+          message: 'An error has occured with the server',
+          error: error
+        });
+      });
+  }); 
+   
+// router.post('/login', (req, res) => {
+//     let { username, password } = req.body
+//     Users.findBy({ username })//takes first item out of object
+//         //passing it the password guess in plain text and the password hash obtained from the database to validate credentials.
+//         //If the password guess is valid, the method returns true, otherwise it returns false.The library will hash the password guess first and then compare the hashes
+//         .then(user => {
+//             if (user && bcrypt.compareSync(password, user.password)) {
+//                 const token = generateToken(user)
+//                 res.status(200).json({ message: `Hello ${user.username}, You've successfully logged in`, token })
+//             } else {
+//                 res.status(401).json({ message: 'invalid login info, try again.' })
+//             }
+//         }).catch(error => {
+//             console.log(error)
+//         //     res.status(500).json({ message: 'Hey backend, you messed up, login failed', error })
+//         })
+// })
 
 function generateToken(user) {
     const payload = {

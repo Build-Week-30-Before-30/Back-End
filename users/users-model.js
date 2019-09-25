@@ -12,8 +12,8 @@ function addUser(user) {
         .insert(user)
 }
 
-function findBy(username) {
-    return db('users').where(username)
+function findBy(filter) {
+    return db('users').where(filter)
 }
 
 function getUsers() {
