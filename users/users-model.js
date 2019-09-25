@@ -14,6 +14,7 @@ function addUser(user) {
 
 function findBy(filter) {
     return db('users').where(filter)
+    .first();
 }
 
 function getUsers() {

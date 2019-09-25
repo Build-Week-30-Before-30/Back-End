@@ -44,9 +44,10 @@ router.post('/login', (req, res) => {
     let { username, password } = req.body;
   
     Users.findBy({ username })
-      .first()
+     .first()
       .then(user => {
-        if (users && bcrypt.compareSync(password, user.password)) {
+          console.log(user)
+        if (user && bcrypt.compareSync(password, user.password)) {
           // create username token 
           const token = generateToken(user);
   
@@ -59,6 +60,7 @@ router.post('/login', (req, res) => {
         }
       })
       .catch(error => {
+          console.log(error)
         // no user with that username 
         res.status(500).json({
           message: 'An error has occured with the server',
@@ -92,7 +94,7 @@ function generateToken(user) {
     const option = {
         expiresIn: '8h'
     }
-    return jwt.sign(payload, secret.jwtSecret, option)
+    return jwt.sign(payload, secrets.jwtSecret, option)
 }
 
 // GET ALL USERS
