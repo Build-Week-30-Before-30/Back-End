@@ -1,4 +1,5 @@
 exports.seed = function(knex) {
+  const { item_name, description } = req.body;
     // Deletes ALL existing entries
     return knex('items').truncate()
       .then(function () {

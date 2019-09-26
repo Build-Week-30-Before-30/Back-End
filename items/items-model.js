@@ -26,12 +26,10 @@ function getItemById(id) {
         .first()
 }
 
-function addItem(newItem, id) {
-    newItem = ({...newItem, user_id: id})
+function addItem(newItem) {
     console.log(newItem, 'new item')
-    return db('items')
-        .insert(newItem)
-        .then(res => getItemsByUser(id))
+    return db('items').insert(newItem)
+       
 }
 
 function editItem(id, newBody) {

@@ -48,16 +48,23 @@ function bodyProps(req, res, next) {
 
 // CREATE NEW ITEM
 
-router.post('/items', bodyProps, restricted, checkBody, (req, res) => {
-    const newItem = req.body
-    const { id } = req.user
-    // console.log(newItem, 'new item')
-
-    Items.addItem(newItem, id)
-        .then(result => res.status(201).json(result))
-        // .then(result => res.send('send it'))
-        .catch(error => res.status(500).json(error))
+router.post('/items', (req, res) => {
+    const { item_name, description } = req.body;
+    console.log(req.body)
+    if (!item_name) {
+        return res.status(422).json({ error: "fill out required name field!" });
+      } else {
+      
+    const newItem = {item_name, description};
+    Items.addItem(req.body) 
+        .then(result => {
+            console.log("result", result)
+        res.status(201).json(result)
+            })
+        .catch(error => {res.status(500).json(error);
 })
+}
+});
 
 
 // READ ALL ITEMS
