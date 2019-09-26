@@ -1,13 +1,13 @@
 // Update with your 
 
 
-const localPg = {
-  host: 'localhost',
-  database: 'items',
-  user: 'Admin',
-  password: 'Testing1'
-}
-const productionDbConnection = process.env.DATABASE_URL || localPg
+// const localPg = {
+//   host: 'localhost',
+//   database: 'items',
+//   user: 'Admin',
+//   password: 'Testing1'
+// }
+const productionDbConnection = process.env.DATABASE_URL 
 
 module.exports = {
 
