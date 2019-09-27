@@ -26,7 +26,7 @@ exports.up = function(knex) {
                 .onUpdate('CASCADE')
             tbl
                 .boolean('completed')
-                .defaultTo (false)
+                .defaultTo(false)
             
             tbl
                 .text('links')
