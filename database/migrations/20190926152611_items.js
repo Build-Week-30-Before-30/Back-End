@@ -25,11 +25,11 @@ exports.up = function(knex) {
                 .onDelete('CASCADE')
                 .onUpdate('CASCADE')
             tbl
-                .boolean('links')
-                .defaultTo(true)
+                .boolean('completed')
+                .defaultTo (false)
             
             tbl
-                .text('completed')
+                .text('links')
         })
     };
     
