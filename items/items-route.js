@@ -117,13 +117,11 @@ router.put('/update-item/:id', restricted, checkId, checkBody, bodyProps, (req, 
 
     Items.getItemById(id)
         .then(item => {
-            if (item.user_id === userId) {
+            
                 Items.editItem(id, newBody)
                     .then(result => res.status(200).json(result))
                     .catch(error => res.status(500).json(error))
-            } else {
-                res.status(400).json({ message: 'user can only edit item with corresponding user id' })
-            }
+            
         })
 })
 
