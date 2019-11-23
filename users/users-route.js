@@ -32,41 +32,52 @@ router.post('/register', (req, res) => {
     const user = req.body
     const hash = bcrypt.hashSync(user.password, 14)
     user.password = hash
-    return users.addUser(user)
+    Users.addUser(user)
         .then(created => {
             res.status(201).json(created)
         }).catch(error => {
+            console.log(error)
             res.status(500).json({ message: 'failed to add user' })
         })
 })
-   
+
 router.post('/login', (req, res) => {
-    let { password, username } = req.body
-    students.findBy({ username })
-        .first()//takes first item out of object
-        //passing it the password guess in plain text and the password hash obtained from the database to validate credentials.
-        //If the password guess is valid, the method returns true, otherwise it returns false.The library will hash the password guess first and then compare the hashes
-        .then(user => {
-            if (user && bcrypt.compareSync(password, user.password)) {
-                const token = generateToken(user)
-                res.status(200).json({ message: `Hello ${user.username}, You've successfully logged in`, token })
-            } else {
-                res.status(401).json({ message: 'invalid login info, try again.' })
-            }
-        }).catch(error => {
-            res.status(500).json({ message: 'Hey backend, you messed up, login failed' })
-        })
-})
+    let { username, password } = req.body;
+  
+    Users.findBy({ username })
+     .first()
+      .then(user => {
+          console.log(user)
+        if (user && bcrypt.compareSync(password, user.password)) {
+          // create username token 
+          const token = generateToken(user);
+  
+          // send back the token 
+          res.status(200).json({ token });
+        } else {
+  
+          // incorrect password 
+          res.status(401).json({ message: 'Invalid Credentials' });
+        }
+      })
+      .catch(error => {
+          console.log(error)
+        // no user with that username 
+        res.status(500).json({
+          message: 'An error has occured with the server',
+          error: error
+        });
+      });
+  }); 
 
 function generateToken(user) {
     const payload = {
-        subject: user.id,
         username: user.username,
     }
     const option = {
         expiresIn: '8h'
     }
-    return jwt.sign(payload, secret.jwtSecret, option)
+    return jwt.sign(payload, secrets.jwtSecret, option)
 }
 
 // GET ALL USERS
